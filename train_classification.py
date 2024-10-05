@@ -24,7 +24,7 @@ def parse_args():
     parser.add_argument('--batch_size', type=int, default=24, help='batch size in training')
     parser.add_argument('--model', default='pointnet_cls', help='model name [default: pointnet_cls]')
     parser.add_argument('--num_category', default=2, type=int, choices=[2], help='number of categories (2 for binary classification)')
-    parser.add_argument('--epoch', default=90, type=int, help='number of epoch in training')
+    parser.add_argument('--epoch', default=150, type=int, help='number of epoch in training')
     parser.add_argument('--learning_rate', default=0.001, type=float, help='learning rate in training')
     parser.add_argument('--num_point', type=int, default=1024, help='Point Number')
     parser.add_argument('--optimizer', type=str, default='Adam', help='optimizer for training')
