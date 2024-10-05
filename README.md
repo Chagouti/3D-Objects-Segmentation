@@ -1,1 +1,1 @@
-# 3D-Objects-Segmentation
+# IntrA 3D Objects Classification
