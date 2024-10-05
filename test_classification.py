@@ -118,16 +118,17 @@ def main(args):
 
     '''MODEL LOADING'''
     num_class = args.num_category  # num_class is now 2 for binary classification
-    model_name = os.listdir(experiment_dir + '/logs')[0].split('.')[0]
+    model_name = 'pointnet2_cls_ssg'
+    print(f'Model name: {model_name}')  # Add this line to check the value
     model = importlib.import_module(model_name)
 
     classifier = model.get_model(num_class, normal_channel=args.use_normals)
     if args.use_cpu:
         classifier = classifier.cpu()  # Load model to CPU
-        checkpoint = torch.load('/content/Pointnet_Pointnet2_pytorch/log/classification/pointnet2_ssg_wo_normals/checkpoints/best_model.pth', map_location=torch.device('cpu'))  # Load checkpoint on CPU
+        checkpoint = torch.load('/content/IntrA-3D-Objects-Classification/Pointnet_Pointnet2_pytorch/log/classification/pointnet2_ssg_wo_normals/checkpoints/best_model.pth', map_location=torch.device('cpu'))  # Load checkpoint on CPU
     else:
         classifier = classifier.cuda()
-        checkpoint = torch.load('/content/Pointnet_Pointnet2_pytorch/log/classification/pointnet2_ssg_wo_normals/checkpoints/best_model.pth')
+        checkpoint = torch.load('/content/IntrA-3D-Objects-Classification/Pointnet_Pointnet2_pytorch/log/classification/pointnet2_ssg_wo_normals/checkpoints/best_model.pth')
 
     classifier.load_state_dict(checkpoint['model_state_dict'])
      # Print model parameters
