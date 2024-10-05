@@ -32,7 +32,7 @@ def farthest_point_sample(point, npoint):
     return point
 
 class IntrADataLoader(Dataset):
-    def __init__(self, root, num_point,state='train',num_category, use_uniform_sample, use_normals, split='train', process_data=False):
+    def __init__(self, root, num_point,state,num_category, use_uniform_sample, use_normals, split='train', process_data=False):
         """
         Args:
             root: Path to the folder containing the NumPy files.
@@ -55,28 +55,28 @@ class IntrADataLoader(Dataset):
         # Load all data and labels
         all_data = np.load(os.path.join(root, 'all_points.npy'))  # Replace with actual path
         all_labels = np.load(os.path.join(root, 'all_labels.npy'))  # Replace with actual path
+        if state=='train':
+           # Separate the data based on labels (assuming labels are 0 and 1)
+           data_label_0 = all_data[all_labels == 0]
+           data_label_1 = all_data[all_labels == 1]
+           labels_0 = all_labels[all_labels == 0]
+           labels_1 = all_labels[all_labels == 1]
 
-        # Separate the data based on labels (assuming labels are 0 and 1)
-        data_label_0 = all_data[all_labels == 0]
-        data_label_1 = all_data[all_labels == 1]
-        labels_0 = all_labels[all_labels == 0]
-        labels_1 = all_labels[all_labels == 1]
+           # Split the data and labels for each class (80% train, 20% test)
+           train_data_0, test_data_0, train_labels_0, test_labels_0 = train_test_split(data_label_0, labels_0, test_size=0.2, random_state=42)
+           train_data_1, test_data_1, train_labels_1, test_labels_1 = train_test_split(data_label_1, labels_1, test_size=0.2, random_state=42)
 
-        # Split the data and labels for each class (80% train, 20% test)
-        train_data_0, test_data_0, train_labels_0, test_labels_0 = train_test_split(data_label_0, labels_0, test_size=0.2, random_state=42)
-        train_data_1, test_data_1, train_labels_1, test_labels_1 = train_test_split(data_label_1, labels_1, test_size=0.2, random_state=42)
+           # Combine the training data and labels from both classes
+           train_data = np.concatenate([train_data_0, train_data_1], axis=0)
+           train_labels = np.concatenate([train_labels_0, train_labels_1], axis=0)
 
-        # Combine the training data and labels from both classes
-        train_data = np.concatenate([train_data_0, train_data_1], axis=0)
-        train_labels = np.concatenate([train_labels_0, train_labels_1], axis=0)
+           # Combine the test data and labels from both classes
+           test_data = np.concatenate([test_data_0, test_data_1], axis=0)
+           test_labels = np.concatenate([test_labels_0, test_labels_1], axis=0)
 
-        # Combine the test data and labels from both classes
-        test_data = np.concatenate([test_data_0, test_data_1], axis=0)
-        test_labels = np.concatenate([test_labels_0, test_labels_1], axis=0)
-
-        # Shuffle the training and test sets to ensure random distribution
-        train_data, train_labels = shuffle(train_data, train_labels, random_state=42)
-        if state='train':
+           # Shuffle the training and test sets to ensure random distribution
+           train_data, train_labels = shuffle(train_data, train_labels, random_state=42)
+       
            test_data, test_labels = shuffle(test_data, test_labels, random_state=42)
         else:
            test_data, test_labels = shuffle(all_data, all_labels, random_state=42)
@@ -85,7 +85,7 @@ class IntrADataLoader(Dataset):
         if split == 'train':
             self.data = train_data
             self.labels = train_labels
-        elif split=='test'
+        else:
             self.data = test_data
             self.labels = test_labels
 
