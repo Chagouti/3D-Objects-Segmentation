@@ -89,7 +89,7 @@ class IntrADataLoader(Dataset):
             self.data = test_data
             self.labels = test_labels
 
-        print(f"Loaded {len(self.data)} samples for {split} split.")
+        
 
     def __len__(self):
         return len(self.data)
