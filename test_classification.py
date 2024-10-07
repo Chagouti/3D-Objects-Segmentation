@@ -119,10 +119,6 @@ def main(args):
     '''MODEL LOADING'''
     num_class = args.num_category  # num_class is now 2 for binary classification
     model_name = os.listdir(experiment_dir + '/logs')[0].split('.')[0]
-
-    
-    #model_name = 'pointnet2_cls_ssg'
-    print(f'Model name: {model_name}')  # Add this line to check the value
     model = importlib.import_module(model_name)
 
     classifier = model.get_model(num_class, normal_channel=args.use_normals)
@@ -134,16 +130,10 @@ def main(args):
         checkpoint = torch.load('/content/IntrA-3D-Objects-Classification/log/classification/pointnet2_ssg_wo_normals/checkpoints/best_model.pth')
 
     classifier.load_state_dict(checkpoint['model_state_dict'])
-     # Print model parameters
-    #log_string('Model Parameters:')
-    #for name, param in classifier.named_parameters():
-        #log_string(f"{name}: {param.size()}")
+    
     with torch.no_grad():
         test(classifier.eval(), testDataLoader, vote_num=args.num_votes, num_class=num_class,show_progress=False)
-        #log_string('Test Instance Accuracy: %f, Class Accuracy: %f' % (instance_acc, class_acc))
-        #log_string('Class 0 Accuracy: %f, Class 1 Accuracy: %f' % (class_0_acc, class_1_acc))
-        
-
+ 
 if __name__ == '__main__':
     args = parse_args()
     main(args)
