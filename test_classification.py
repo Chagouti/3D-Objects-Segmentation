@@ -106,10 +106,7 @@ def main(args):
     file_handler.setLevel(logging.INFO)
     file_handler.setFormatter(formatter)
     logger.addHandler(file_handler)
-    
 
-    # Change dataset path to point to your IntrA dataset
-    #data_path = '/content/'  # Path to IntrA dataset
     
     # Replace ModelNetDataLoader with your dataset loader
     test_dataset = IntrADataLoader(root=ROOT_DIR, num_point=args.num_point, num_category=args.num_category, use_uniform_sample=args.use_uniform_sample, use_normals=args.use_normals,state='test', split='test', process_data=False)
@@ -124,10 +121,10 @@ def main(args):
     classifier = model.get_model(num_class, normal_channel=args.use_normals)
     if args.use_cpu:
         classifier = classifier.cpu()  # Load model to CPU
-        checkpoint = torch.load(ROOT_DIR+'/IntrA-3D-Objects-Classification/log/classification/pointnet2_ssg_wo_normals/checkpoints/best_model.pth', map_location=torch.device('cpu'))  # Load checkpoint on CPU
+        checkpoint = torch.load(ROOT_DIR+'/log/classification/pointnet2_ssg_wo_normals/checkpoints/best_model.pth', map_location=torch.device('cpu'))  # Load checkpoint on CPU
     else:
         classifier = classifier.cuda()
-        checkpoint = torch.load(ROOT_DIR+'/IntrA-3D-Objects-Classification/log/classification/pointnet2_ssg_wo_normals/checkpoints/best_model.pth')
+        checkpoint = torch.load(ROOT_DIR+'/log/classification/pointnet2_ssg_wo_normals/checkpoints/best_model.pth')
 
     classifier.load_state_dict(checkpoint['model_state_dict'])
     
