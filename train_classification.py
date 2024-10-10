@@ -121,11 +121,10 @@ def main(args):
 
     '''DATA LOADING'''
     log_string('Load dataset ...')
-    data_path = '/content/'  # Updated path to where the dataset is located
-
+   
     # Load dataset with ModelNetDataLoader
     train_dataset = IntrADataLoader(
-        root=data_path, 
+        root=ROOT_DIR, 
         num_point=args.num_point, 
         num_category=args.num_category, 
         use_uniform_sample=args.use_uniform_sample, 
@@ -135,7 +134,7 @@ def main(args):
         process_data=args.process_data
     )
     test_dataset = IntrADataLoader(
-        root=data_path, 
+        root=ROOT_DIR, 
         num_point=args.num_point, 
         num_category=args.num_category, 
         use_uniform_sample=args.use_uniform_sample, 
