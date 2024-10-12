@@ -23,7 +23,7 @@ def parse_args():
     parser.add_argument('--use_cpu', action='store_true', default=True, help='use cpu mode')
     parser.add_argument('--gpu', type=str, default='0', help='specify gpu device')
     parser.add_argument('--batch_size', type=int, default=24, help='batch size in training')
-    
+    parser.add_argument('--model', default='pointnet_cls', help='model name [default: pointnet_cls]')
     # Set num_category to 2 for binary classification (IntrA has two classes)
     parser.add_argument('--num_category', default=2, type=int, choices=[2], help='training on IntrA dataset (binary classification)')
     
@@ -90,16 +90,16 @@ def main(args):
 
     '''MODEL LOADING'''
     num_class = args.num_category  # num_class is now 2 for binary classification
-    model_name = os.listdir(experiment_dir + '/logs')[0].split('.')[0]
+    model_name = args.model
     model = importlib.import_module(model_name)
 
     classifier = model.get_model(num_class, normal_channel=args.use_normals)
     if args.use_cpu:
         classifier = classifier.cpu()  # Load model to CPU
-        checkpoint = torch.load(ROOT_DIR+'/log/classification/pointnet2_ssg_wo_normals/checkpoints/best_model.pth', map_location=torch.device('cpu'))  # Load checkpoint on CPU
+        checkpoint = torch.load(experiment_dir+'/checkpoints/best_model.pth', map_location=torch.device('cpu'))  # Load checkpoint on CPU
     else:
         classifier = classifier.cuda()
-        checkpoint = torch.load(ROOT_DIR+'/log/classification/pointnet2_ssg_wo_normals/checkpoints/best_model.pth')
+        checkpoint = torch.load(experiment_dir+'/checkpoints/best_model.pth')
 
     classifier.load_state_dict(checkpoint['model_state_dict'])
      
