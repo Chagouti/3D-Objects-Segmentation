@@ -9,9 +9,16 @@ The IntrA dataset provides 3D point clouds in OBJ format, representing medical s
 
 ## Usage:
 To train the model using PointNet2:
-
-`` python train_classification.py --model pointnet2_cls_ssg --use_normals --log_dir pointnet2_ssg_wo_normals ``
-
+```Shell
+python train_classification.py --model pointnet2_cls_ssg --use_normals --log_dir pointnet2_ssg_wo_normals
+```
 To evaluate the trained model on the test dataset:
-
-`` python test_classification.py --model pointnet2_cls_ssg --use_normals --log_dir pointnet2_ssg_wo_normals ``
+```Shell
+python test_classification.py --model pointnet2_cls_ssg --use_normals --log_dir pointnet2_ssg_wo_normals
+```
+## Performance
+| Model | Aneurysm Class Accuracy | Vessel Class Acuracy |
+|--|--|--|
+| PointNet (Pytorch with normal) |  65| 94.98|
+| PointNet2_SSG (Pytorch with normal) |  **90.51**| **98.52**|
+| PointNet2_MSG (Pytorch with normal) |  88.83| 97.95|
