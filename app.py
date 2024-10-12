@@ -29,7 +29,7 @@ def save_to_npy(point_cloud, file_path):
 
 def run_classification_script():
     output = subprocess.run(
-        ["python", "predict_single_object.py", "--use_normals", "--log_dir", "pointnet2_ssg_wo_normals"],
+        ["python", "predict_single_object.py", "--model", "pointnet2_cls_ssg", "--use_normals", "--log_dir", "pointnet2_ssg_wo_normals"],
         cwd="./",
         capture_output=True,
         text=True
